@@ -1,5 +1,7 @@
 theme: jekyll-theme-architect
 
+title: Semio Blog
+
 # SITE CONFIGURATION
 baseurl: ""
 url: "https://semiod-github.github.io"
