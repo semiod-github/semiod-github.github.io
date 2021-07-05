@@ -5,4 +5,4 @@
 2. [Programming](./programming.html)
 3. [DevSecOps](./devops.html)
 4. Domain <br />
-     [Telecom](./telecom.html)
+     -[Telecom](./telecom.html)
