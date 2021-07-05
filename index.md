@@ -1,44 +1,7 @@
 # Never stop learning, because life never stops teaching.
 
 -------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bullet1
-- Bullet2
-- Bullet3
-- List1
-- List2
-- List3
-
-1. Numbered
-2. List
-
-It's very easy to make some words **bold** and other words *italic* with Markdown. You can even [link to Google!](http://google.com)
+1. [DevOps](./devops.md)
+2. [Programming](./programming.md)
+3. [Architecture](./architecture.md)
+4. [Telecom](./telecom.md)
