@@ -7,4 +7,4 @@
 4. [Cloud](./cloud.html)
 5. Domain <br />
      -[Telecom](./telecom.html)
-6. [Booksi](./books.html)
+6. [Books](./books.html)
