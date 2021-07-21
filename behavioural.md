@@ -119,3 +119,27 @@
     1. Every habit has an activation energy that is required to get started. The smaller the habit, the less energy you need to start.
     2. Catalysts lower the activation energy required to start a new habit. Optimizing your environment is the best way to do this in the real world. In the right environment, every habit is easier.
     3. Even simple habits often have intermediate steps. Eliminate the intermediate steps with the highest activation energy and your habits will be easier to accomplish.
+
+### Temptation Bundle
+    1. You're going to create a two-column list:
+       In column one, write down the pleasures you enjoy and the temptations that you want to do.
+       In column two, write down the tasks and behaviors you should be doing, but often procrastinate on.
+       Take your time and write down as many behaviors as possible. Then, browse your list and see if you can link one of your instantly gratifying “want” behaviors with something you “should” be doing.
+    2. Here are a few common examples of temptation bundling:
+       Only listen to audiobooks or podcasts you love while exercising.
+       Only get a pedicure while processing overdue work emails.
+       Only watch your favorite show while ironing or doing household chores.
+       Only eat at your favorite restaurant when conducting your monthly meeting with a difficult colleague.
+
+### Use This Simple Daily Habit to Add More Gratitude to Your Life
+    1. When I sit down to eat dinner, I say one thing that I am grateful for happening today.
+    2. why it works
+	Positive thinking opens your eyes to more opportunities.
+	The individual impact of any one piece of gratitude is small, but the cumulative effect is huge.
+	You start to realize how insignificant monetary things are for your day-to-day happiness.
+	I have stuck with the habit because it is stupidly small.
+	I have stuck with the habit because it is perfectly tied to another behavior.
+### The One Word That Drives Senseless and Irrational Habit
+    There are two important lessons we can take away from Langer's study.
+    1. If you’re going to ask someone for a favor, be sure to use the word because and give the person a reason to fulfill the favor.
+    2. We use reasons—both logical and illogical—to justify our own behavior.The reasons that we use to guide our behavior are just stories that we tell ourselves. Sometimes, those stories are true and accurate. We all have reasons for why now isn’t the right time for that bold move, why we slip up on habits that we say are important to us, and, yes, why we do favors for strangers. What we often fail to realize, however, is that our behaviors can just as easily be driven by irrational reasons as logical ones.
