@@ -143,3 +143,13 @@
     There are two important lessons we can take away from Langer's study.
     1. If you’re going to ask someone for a favor, be sure to use the word because and give the person a reason to fulfill the favor.
     2. We use reasons—both logical and illogical—to justify our own behavior.The reasons that we use to guide our behavior are just stories that we tell ourselves. Sometimes, those stories are true and accurate. We all have reasons for why now isn’t the right time for that bold move, why we slip up on habits that we say are important to us, and, yes, why we do favors for strangers. What we often fail to realize, however, is that our behaviors can just as easily be driven by irrational reasons as logical ones.
+
+### The 5 Triggers That Make New Habits Stick
+    The key to choosing a successful cue is to pick a trigger that is very specific and immediately actionable.
+    1. Cue 1: Time Time-based cues can also be used to stick with routines over and over again. This is my preferred method. For example, every Monday and Thursday I write a new article and post it
+    2. Cue 2: Location When I arrive at the gym, I head to the same spot each time to get ready, change into my lifting gear, and start my warm up. This location in the gym is a simple habit cue that helps prompt my pre-workout routine
+    3. Cue 3: Preceding Event Each night, when I sit down to eat dinner, I say one thing that I was grateful for that day.
+    4. Cue 4: Emotional State I’m trying to get better about noticing when I am holding tension in my body and experiencing stress. When I do notice that I’m feeling particularly stressed, I’ll use this emotional state to cue a deep breathing habit.
+    5. Cue 5: Other People I'm not a heavy drinker, but nearly every time I go out with friends, I get a drink. Why is that? If I'm not yearning for a beer, why get one? It’s simply a response to the environment that I am in and the people I am around.
+
+
