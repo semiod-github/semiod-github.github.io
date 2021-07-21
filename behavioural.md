@@ -25,18 +25,18 @@
 	Inversion of the 4th law (Reward)	Make it unsatisfying.
 
 ### Identity-Based Habits
-   1. The key to building lasting habits is focusing on creating a new identity first.
-   2. Three layers ( innermost to outside ) - Identity, Process and Outcomes
-   3. Outcomes are about what you get. Processes are about what you do. Identity is about what you believe.
-   4. Many people begin the process of changing their habits by focusing on what they want to achieve. This leads us to outcome-based habits. The alternative is to build identity-based habits. With this approach, we start by focusing on who we wish to become.
-   5. e.g Want to become a better writer?
+    1. The key to building lasting habits is focusing on creating a new identity first.
+    2. Three layers ( innermost to outside ) - Identity, Process and Outcomes
+    3. Outcomes are about what you get. Processes are about what you do. Identity is about what you believe.
+    4. Many people begin the process of changing their habits by focusing on what they want to achieve. This leads us to outcome-based habits. The alternative is to build identity-based habits. With this approach, we start by focusing on who we wish to become.
+    5. e.g Want to become a better writer?
           Identity: Become the type of person who writes 1,000 words every day.
           Small win: Write one paragraph each day this week.
 
 ### How to Break a Bad Habit
-   1. What causes bad habits? Stress and boredom
-   2. You don't eliminate a bad habit, you replace it.
-   3. How to break a bad habit
+    1. What causes bad habits? Stress and boredom
+    2. You don't eliminate a bad habit, you replace it.
+    3. How to break a bad habit
        Choose a substitute for your bad habit
        Cut out as many triggers as possible
        Join forces with somebody.
@@ -46,7 +46,7 @@
        Use the word “but” to overcome negative self–talk
        Plan for failure.
        To Change Your Behavior, Change Your Environment 
-   4. It's awareness that will show you how to actually make change.
+    4. It's awareness that will show you how to actually make change.
       When does your bad habit actually happen?
       How many times do you do it each day?
       Where are you?
