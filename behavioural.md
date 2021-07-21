@@ -24,15 +24,6 @@
 	Inversion of the 3rd law (Response)	Make it difficult.
 	Inversion of the 4th law (Reward)	Make it unsatisfying.
 
-### Identity-Based Habits
-    1. The key to building lasting habits is focusing on creating a new identity first.
-    2. Three layers ( innermost to outside ) - Identity, Process and Outcomes
-    3. Outcomes are about what you get. Processes are about what you do. Identity is about what you believe.
-    4. Many people begin the process of changing their habits by focusing on what they want to achieve. This leads us to outcome-based habits. The alternative is to build identity-based habits. With this approach, we start by focusing on who we wish to become.
-    5. e.g Want to become a better writer?
-          Identity: Become the type of person who writes 1,000 words every day.
-          Small win: Write one paragraph each day this week.
-
 ### How to Break a Bad Habit
     1. What causes bad habits? Stress and boredom
     2. You don't eliminate a bad habit, you replace it.
@@ -74,3 +65,44 @@
        Visual cues can be used to drive short-term and long-term motivation.
     3. Creating Your Own Paper Clip Strategy
        Want to drink 8 glasses of water each day? Start with 8 paper clips and slide one over each time you finish a glass.
+
+### Identity-Based Habits
+    1. The key to building lasting habits is focusing on creating a new identity first.
+    2. Three layers ( innermost to outside ) - Identity, Process and Outcomes
+    3. Outcomes are about what you get. Processes are about what you do. Identity is about what you believe.
+    4. Many people begin the process of changing their habits by focusing on what they want to achieve. This leads us to outcome-based habits. The alternative is to build identity-based habits. With this approach, we start by focusing on who we wish to become.
+    5. e.g Want to become a better writer?
+          Identity: Become the type of person who writes 1,000 words every day.
+          Small win: Write one paragraph each day this week.
+
+### Changing the Cues
+    1. You can change a habit  by identifying and altering the cues that prompt your behavior
+       e.g read more books by continually having 20-30 books on hold at the library
+    2. Reduced exposure to negative cues
+       e.g quit e-cigarettes with a combination of determination and also quitting coffee at the same time
+
+### Habit Stacking
+    1. refers to it as “anchoring” because you anchor—or stack—your new habit onto a current habit.
+      e.g meditate for 20 minutes after brushing my teeth in the morning. Linking new habits onto a keystone one seems to work
+
+### Environment Design
+    1. The simple truth is our environment often shapes our behavior.
+    2. For starters, you can break a bad habit by increasing the friction in your environment.
+       e.g husband still loves his Pringles, as do I, but they’re now kept in a locked car that’s parked in the cold.
+           The only way to turn off my alarm is to scan a QR Code I keep in the bathroom.
+    3. we think of designing physical spaces, but you can use the same principles to shape your digital environment as well
+       e.g I significantly cut down on mindless Instagram time. Simply logging out of the app makes a big difference.
+    4. On the flip side, you can foster good habits by reducing the friction in your environment.
+       e.g I've been running at 6 A.M. for the past two years. I always put my running gear (Garmin, compression sleeves, shoes, etc.) into a neat pile the night before. When I get up, I just get dressed and go out the door.
+
+### Habit Substitution
+    1. it can be more effective to replace your bad habit than to merely try to eliminate it.
+       e.g replaced drinking beer every day in a succession of replacements, going through fruit juice, then iced tea, then seltzer water. I did it over about nine months by having one less drink a week. Once I finally quit, I got past the cravings in only two weeks
+
+### Mindset Tricks
+    1.  employ clever little mental tricks to stick with a good habit.
+        e.g I quit smoking by saying a mantra out loud every time I wanted a cigarette (“your brain tricks you”) which I think changed my thinking from the subconscious part of my brain to the logical part
+
+### Habit Tracking
+    1. My favorite approach is to pick a very tiny version of your habit and track that
+      e.g I have been tracking the habit of “reading 1 page” for the last month 
