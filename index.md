@@ -8,4 +8,4 @@
 5. Domain <br />
      -[Telecom](./telecom.html)
 6. [Soft Skills](./behavioural.htmll)
-6. [Books](./books.html)
+7. [Books](./books.html)
