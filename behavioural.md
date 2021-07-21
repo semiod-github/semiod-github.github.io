@@ -47,11 +47,11 @@
        Plan for failure.
        To Change Your Behavior, Change Your Environment 
     4. It's awareness that will show you how to actually make change.
-      When does your bad habit actually happen?
-      How many times do you do it each day?
-      Where are you?
-      Who are you with?
-      What triggers the behavior and causes it to start?
+       When does your bad habit actually happen?
+       How many times do you do it each day?
+       Where are you?
+       Who are you with?
+       What triggers the behavior and causes it to start?
 
 ### The Power of Bright-Line Rules
     1. A bright-line rule refers to a clearly defined rule or standard. It is a rule with clear interpretation and very little wiggle room. It establishes a bright line for what the rule is saying and what it is not saying.  e.g I only process email between 11AM and 6PM.
