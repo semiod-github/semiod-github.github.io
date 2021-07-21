@@ -7,5 +7,5 @@
 4. [Cloud](./cloud.html)
 5. Domain <br />
      -[Telecom](./telecom.html)
-6. [Soft Skills](./behavioural.htmll)
+6. [Soft Skills](./behavioural.html)
 7. [Books](./books.html)
