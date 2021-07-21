@@ -13,7 +13,7 @@
 ###  How To Start New Habits That Actually Stick
     1. 4 Stges of Habit - Cue, carving, Response and Reward.
     2. The cue triggers a craving, which motivates a response, which provides a reward, which satisfies the craving and, ultimately, becomes associated with the cue.
-    3. How to craete a Good habit
+    3. How to create a Good habit
 	The 1st law (Cue)	Make it obvious.
 	The 2nd law (Craving)	Make it attractive.
 	The 3rd law (Response)	Make it easy.
