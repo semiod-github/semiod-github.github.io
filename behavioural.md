@@ -1,7 +1,7 @@
 ## Topics 
 -------------------------------------------------------------------------------
-// [Habits](https://jamesclear.com/habit-guide)
-   Habits are the small decisions you make and actions you perform every day. According to researchers at Duke University, habits account for about 40 percent of our behaviors on any given day.
+## [Habits](https://jamesclear.com/habit-guide)
+	Habits are the small decisions you make and actions you perform every day. According to researchers at Duke University, habits account for about 40 percent of our behaviors on any given day.
 
 ### How to Build a New Habit
     1. Start with an incredibly small habit.
@@ -13,7 +13,7 @@
 ###  How To Start New Habits That Actually Stick
     1. 4 Stges of Habit - Cue, carving, Response and Reward.
     2. The cue triggers a craving, which motivates a response, which provides a reward, which satisfies the craving and, ultimately, becomes associated with the cue.
-    3. How to create a Good habit
+    3. How to craete a Good habit
 	The 1st law (Cue)	Make it obvious.
 	The 2nd law (Craving)	Make it attractive.
 	The 3rd law (Response)	Make it easy.
@@ -25,18 +25,18 @@
 	Inversion of the 4th law (Reward)	Make it unsatisfying.
 
 ### Identity-Based Habits
-    1. The key to building lasting habits is focusing on creating a new identity first.
-    2. Three layers ( innermost to outside ) - Identity, Process and Outcomes
-    3. Outcomes are about what you get. Processes are about what you do. Identity is about what you believe.
-    4. Many people begin the process of changing their habits by focusing on what they want to achieve. This leads us to outcome-based habits. The alternative is to build identity-based habits. With this approach, we start by focusing on who we wish to become.
-    5. e.g Want to become a better writer?
+   1. The key to building lasting habits is focusing on creating a new identity first.
+   2. Three layers ( innermost to outside ) - Identity, Process and Outcomes
+   3. Outcomes are about what you get. Processes are about what you do. Identity is about what you believe.
+   4. Many people begin the process of changing their habits by focusing on what they want to achieve. This leads us to outcome-based habits. The alternative is to build identity-based habits. With this approach, we start by focusing on who we wish to become.
+   5. e.g Want to become a better writer?
           Identity: Become the type of person who writes 1,000 words every day.
           Small win: Write one paragraph each day this week.
 
 ### How to Break a Bad Habit
-    1. What causes bad habits? Stress and boredom
-    2. You don't eliminate a bad habit, you replace it.
-    3. How to break a bad habit
+   1. What causes bad habits? Stress and boredom
+   2. You don't eliminate a bad habit, you replace it.
+   3. How to break a bad habit
        Choose a substitute for your bad habit
        Cut out as many triggers as possible
        Join forces with somebody.
@@ -46,12 +46,12 @@
        Use the word “but” to overcome negative self–talk
        Plan for failure.
        To Change Your Behavior, Change Your Environment 
-    4. It's awareness that will show you how to actually make change.
-       When does your bad habit actually happen?
-       How many times do you do it each day?
-       Where are you?
-       Who are you with?
-       What triggers the behavior and causes it to start?
+   4. It's awareness that will show you how to actually make change.
+      When does your bad habit actually happen?
+      How many times do you do it each day?
+      Where are you?
+      Who are you with?
+      What triggers the behavior and causes it to start?
 
 ### The Power of Bright-Line Rules
     1. A bright-line rule refers to a clearly defined rule or standard. It is a rule with clear interpretation and very little wiggle room. It establishes a bright line for what the rule is saying and what it is not saying.  e.g I only process email between 11AM and 6PM.
