@@ -107,6 +107,7 @@
 	e.g docker conatiner run -dt --name base02 base02 -c 20 google.com
      17. Command and Arguments : In kubernetes we can overrride the default entrypoint and CMD with command and args filed.
 	 Docker Filed Name ENTRYPOINT -> Kubernetes Filed name -> Command that will be run by container.
+
 	Docker Field Name CMD -> Kubernetes Filed Name args -> Argument passed to the container.
 	  apiVersion: v1
 	  kind: Pod
@@ -134,7 +135,8 @@
 	kubectl run nginx --image=mginx --port=80 --dry-run=client -o yaml
 	kubectl delete pod nginx
 	kubectl delete pod --all
-	
+
+	(https://docs.google.com/document/d/1XpXl9Xm0_4sUtf3gKUA0TFp4qwCvXnu8YO9_0B4OUZo/edit?usp=sharing)	
     21: There can be multiple objects within a Kubernetes cluster. Some of the objects are as follows:
 	Pods, Services, Secrets, Namespaces, Deployments and Daemonsets.
     22: Labelling objects
@@ -259,6 +261,7 @@ ceution
 		Sidecar - Running multiple container as part of a pod in a single node.
 		Ambassador Pattern - Is a type of sidecar pattern were the second conatiner is primarily used to proxy the requests.
 		Adapter Pattern is generally used to transform the application output to standardize/normalize it for aggregation.
+		(https://docs.google.com/document/d/1Uoebi-g-Arua9myZCzK3Kx-rpJsPZ9NK9oyWG8MgdxY/edit?usp=sharing)
     32 Service
 		Kubernetes Service can act as an abstraction which can provide a single IP address and DNS through which pods can be accessed.
 		THis layer of abstraction allows us to perform lot of operations like load balancing, scaling of pods and others.
@@ -316,7 +319,8 @@ ceution
                        name:http
 	Instead of Port Number we can also specify the name while creating service
 	kubectl expose pod nginx --port=80 --target-port=http --name "kplabs-svc"
-		
+
+	(https://docs.google.com/document/d/1QHNHlvPTJSTIk_sLI-c_qm1n4CbG5RufYJmtw1vycbo/edit?usp=sharing)		
      39. Authentication
 	Kubernetes does not have objects which represent normal user accounts.
 	Kubernetes does not manage the user accounts natively.
@@ -713,7 +717,7 @@ ceution
 				name: firstsecret
 				key: dbpass
 		 restartPolicy: Never
-
+	(https://docs.google.com/document/d/1bfWCFQgJ6IhOZbSaliMRaMDIW8c3DX0KyVz96rRtv4E/edit?usp=sharing)
 
 	52 Docker Volumes
 	  By default all files created inside a container are stored on a
@@ -933,4 +937,968 @@ ceution
 	next restart the POD
 	
 	(https://docs.google.com/document/d/1BWhLJSJUXRZWpu2YkhXJsY_fF0DN-4OzHDUD51p72eE/edit?usp=sharing)
+     59 Configuring Kubernetes cluster with Kubeadm
+	Kubeadm allows us to quickly provision a secure Kubernetes cluster.
+	https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm
+	Create a Master and Slave Ubuntu Instance.
+	Install Docker by following below steps
+	  apt-get update 
+	  apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+	  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+	  add-apt-repository "deb [arch=amd64] https://download.com/linux/ubuntu $(lsb_release -cs) stable
+	  apt-get update && apt-get -y install docker-ce docker-ce-cli
+	  systemctl start docker
+	Configuration: (master node)
+	  cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+	  net.bridge.bridge-nf-call-ip6tables = 1
+	  net.bridge.bridge-nf-call-iptables = 1
+	  EOF
+	  sudo sysctl --system
+	Installation:
+	  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+	  cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+	  dev https://apt.kubernetes.io/ kubernetes-zenial main
+	  EOF
+	  apt-get update
+	  apt-get install -y kubelet kubeadm kubectl 
+	  apt-mark hold kubelet kubeadm kubectl
+	  
+	Initialization
+	  kubeadm init -pod-network-cidr=10.244.0.0/16
+	Tp start using your cluster you need to run the following as a regular user:
+	mkdir -p $HOME/.kube
+	sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+	sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+	below command needs to be run only on worker node.This will form the
+cluster however the nodes will not be in ready state.
+	kubeadm join 139.59.13.209:6443 --token x3xsb9.17inx25d7ekx6t1z \
+	     --discovery-token-ca-cert-hash
+	sha256:510b26b3658ecdab85427c3c92b3a5ace1b7abb5e55bd75302e70d873684ea1b
+	
+	next once the cluster is formed by above command run below command
+	kubectl apply -f
+	https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+	Now both nodes will be ready state.	
+	
+	
+     60 Upgrading Kubeadm Clusters
+	Following are the high-level steps required to perfrom kubeadm upgrade.
+	1. Find the latest version to upgrade to.
+	2. Unhold the kubeadm binary
+	   apt-mark unhold kubelet
+	3. Download the latest kubeadm binary(apt-get install)
+	   apt-get install -y kubeadm=1.19.1-00
+	4. Drain the control plane node.
+	   kubectl drain <cp-node-nam> --ignore-daemonsets
+	5  Perform the Upgrade Plan
+	   sudo kubeadm upgrade plan
+	6  Choose version to upgrade and run appropriate command
+	   kubeadm upgrade apply v1.19.3
+	   kubectl uncordon kubeadm-master
+	7  Upgrade the kubelet and kubectl binaries
+	   apt-mark unhold kubelet kubectl && 
+	   apt-get update && apt-get install -y kubelet=1.19.1-00
+kubectl=1.19.1.-00
+	   apt-mark hold kubelet kubectl
+	   systemctl daemon-reload
+	   systemctl restart kubelet
+	   
+     61 Kubernetes from Scratch
+	  Create a master and slave ubuntu server
+          Server - Contains binarie for master server components like API 
+	  server , controller manager, scheduler and others.
+	  Node - Contains binaries required by worker nodes kubelet, i
+	  kube-proxy
+	  Client - Binaries required by client, Kubectl
+	  https://kubernetes.io/docs/setup/release/notes
+	  Note : etcd is a seperate repo as its not managed by Kubernetes
+	  
+	  There are multiple components which will be communicating with each
+other
+	  When communication is in plain-text, it is prone to lot of attacks.
+	  hence it is importnat to have secure communication between multiple
+components. This can be achieved with the help of certificates.
+	  certificate Authority is an entity which issues digital certificates.
+	 key part is that both the receiver and the sender trusts the CA.
+	 1. Creating a private key for certificate Authority
+	   openssl genrsa -out ca.key 2048
+	 2. Creating CSR
+	   openssl req -new -key ca.key -subj "/CN=KUBERNETES-CA" -out ca.csr
+	 3. Self-Sign the CSR
+	   openssl x509 -req -in ca.csr -signkey ca.key -CAcreateserial -out
+ca.crt -days 1000
+	 
+	   To view certificate
+	   openssl x509 -in ca.crt -text -noout
+	   
+           Configuring etcd
+           etcd is a distrubted reliable key-value store.
+	   etcd reliably stored the configuration data of the kubernetes
+cluster, representing the state of the cluster at any given point of time.
+	   Pre-Requisite:
+	   setenforce 0
+	   sed -i 's/^SELINUX=encforcing$/SELINUX=permissive/'
+/etc/selinux/config
+	   step1 : Configure the Certificates
+	   openssl genrsa -out etcd.key 2048
+	   cd /root/certificates
+	   cat > etcd.cnf <<EOF
+	   [req]
+	   req_extensions = v3_req
+	   distinguishred_name = req_distinguished_name
+	   [req_distinguished_name]
+	   [v3_req]
+	   basicContraints = CA:FALSE
+	   keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+	   subjectAltName = @alt_names
+	   [alt_names]
+	   IP.1 = SERVER-IP-HERE
+	   IP.2 = 127.0.0.1
+	   EOF
+
+	   openssl req -new -key etcd.key -sub "/CN=etcd" -out etcd.csr -config etcd.cnf
+	   openssl x509 -req -in etcd.csr -CA ca.crt -CAkey ca.key
+-CAcreateserial -out etcd.crt -extensions v3_req
+	   step2: copy the Certificates and key to /etc/etcd
+	    mkdir /etc/etcd
+	    cp etcd.crt etcd.key ca.crt /etc/etcd
+	   step 3: Copy the ETCD and ETCDCTL Binaries to the path
+	   cd /root/binaries/kubernetes/server/bin/etcd-v3.4.10-linux-amd64/
+	   cp etcd etcdctl /usr/local/bin/
+	   step 4: Configure the systemd File
+	   Add IP Address to the Environment Varoable of Server_IP
+	   SERVER_IP=YOUR-IP-ADDRESS-HERE
+	   
+	   create a service file
+	   CAT <<EOF | sudo tee /etc/systemd/system/etcd.service
+	   [Unit]
+	   Description=etcd
+	   Documentation=https://github.com/coreos
+
+	   [Service]
+	   ExecStart=/usr/local/bind/etcd \\
+	    --name master-1 \\
+	    --cert-file=/etc/etcd/etcd.crt \\
+	    --key-file=etc/etcd/etcd.key \\
+	    --peer-cert-file=/etc/etcd/etcd.crt \\
+	    --peer-key-file=/etc/etcd/etcd.key \\
+	    --trusted-ca-file=/etc/etcd/ca.crt \\
+	    --peer-trusted-ca-file=/etc/etcd/ca.crt \\
+	    --peer-client-cert-auth \\
+	    --client-cert-auth \\
+	    --initial-advertise-peer-urls https://${SERVER_IP}:2380 \\
+	    --listen-peer-urls https://${SERVER_IP}:2380 \\
+	    --listen-client-urls https://{SERVER_IP}:2379,
+              https://127.0.0.1:2379 \\
+	    --advertise-client-urls https://${SERVER_IP}:2379 \\
+	    --initial-cluster-token etcd-cluster-0 \\
+	    --initial-cluster master-1=https://${SERVER_IP}:2380 \\
+	    --initial-cluster-state new \\
+	    --data-dir=/var/lib/etcd
+	   Restart=on-failure
+	   RestartSec=5
+	
+	   [Install]
+	   WantedBy=multi-user.target
+	   EOF	
+
+	   systemctl start etcd
+	   systemctl status etcd
+	   systemctl enable etcd
+	   
+	   Verification Commands:
+	   when we try with etcdctl --endpoints=https://127.0.0.1:2379 get foo,it gives unkown certificate authority
+
+	   ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379
+--cacert=/etc/etcd/ca.crt --cert=/etc/etcd/etcd.crt --key=/etc/etcd/etcd.key put course "kplabs cka course is awesome"
+	   
+	   step5 : Configuring API server
+	   API server acts as a gateway to the Kubernetes Cluster
+	   When you intercat with you Kubernetes cluster using the kubectl command-line interface, you are actually communicating with the master API server component.
+
+	   kubectl get serviceaccount
+	   kubectl get serviceaccount -o yaml
+	   kubectl get secret default-token-xkhxd - o yaml
+	   kubcetl create serviceaccount demo
+	   kubectl get serviceaccount demo -o yaml
+	   kubectl get secert <name from above commnd> -o yaml
+	   
+	   TokenController runs as part of kube-controller-manager. It
+acts asynchronously. It watches ServiceAccount creation and creates a corresponding ServiceAccount token Secret to allow API access.
+watches ServiceAccount deletion and deletes all corresponding ServiceAccount token Secrets.
+watches ServiceAccount token Secret addition, and ensures the referenced ServiceAccount exists, and adds a token to the Secret if needed.
+watches Secret deletion and removes a reference from the corresponding
+ServiceAccount if needed.
+	   
+	   Pre-requisite: Move the Kube-apiserver binary to the /usr/bim directory
+	   cd /root/binaries/kubernetes/server/bin
+	   cp kube-apiserver /usr/local/bin
+	
+	   Step 1: Generate Configuration File for CSR Creation 
+	   cd /root/certificates
+           cat <<EOF | sudo tee api.conf
+           [req]
+           req_extensions = v3_req
+           distinguishred_name = req_distinguished_name
+           [req_distinguished_name]
+           [v3_req]
+           basicContraints = CA:FALSE
+           keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+           subjectAltName = @alt_names
+           [alt_names]
+           DNS.1 = kubernetes
+           DNS.2 = kubernetes.default
+	   DNS.3 = kubernetes.default.svc
+	   DNS.4 = kubernetes.default.svc.cluster.local
+	   IP.1 = 127.0.0.1
+	   IP.2 = ${SERVER_IP}
+	   IP.3 = 10.32.0.1
+	   EOF
+
+	   step2 : Generate certificates for API Server
+	   openssl genrsa -out kube-api.key 2048
+	   openssl req -new -key kube-api.key -subj "/CN=kube-apiserver" - out kube-api.csr -config api.conf
+	   openssl x509 -req -in kube-api.csr -CA ca.crt -CAkey ca.key
+-CAcreateserial -out kupe-api.crt -extension v3_req -extfile api.conf -days 1000
+	  step3 : Generate Certificate for Service Account 
+	   openssl genrsa -out service-account.key 2048
+	   openssl req -new -key service-account.key -subj
+"/CN=service-accounts" - out service-account.csr
+	   openssl x509 -req -in service-account.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out service-account.crt - days 100
+	   
+	  step4: copy the certificate files to /var/lib/kubernetes directory
+	  mkdir /var/lib/kubernetes
+	  cp etcd.crt etcd.key ca.crt kupe-api.key kube-api.crt
+service-account.crt service-account.key /var/lib/kubernetes
+	  
+	 step5: Creating Encryption key and Configuratiom
+	 ENCRYPTION_KEY= $(head -c 32 /dev/urandom | base64)
+
+	 cat > encryption-at-rest.yaml << EOF
+	 kind: EncryptionConfig
+	 apiVersion: v1
+	 resources:
+	 - resources:
+	    - secrets
+	   providers:
+	    - aescbc
+	        keys:
+	         - name: key1
+	           secret: ${ENCRYPTION_KEY}
+            - identity: {}
+          EOF
+	  
+         cp encryption-at-rest.yaml /var/lib/kubernetes
+	 
+	step 6 : Creating Systemd service file:
+	
+	systemd file:
+
+	cat << EOF | sudo tee /etc/systemd/system/kube-apiserver.service
+	[Unit]
+	Description=Kubernetes API Server
+	Documentation=https://github.com/kubernetes/kubernetes
+
+	[Service]
+	ExecStart=/usr/local/bin/kube-apiserver \
+	--advertise-address=139.59.72.179 \
+	--allow-priviledged=true \	
+	--authorization-mode=Node,RBAC \
+	--client-ca-file=/var/lib/kubernetes/ca.crt \
+	--enable-admission-pligins=NamespaceLifecycle,NodeRestriction,LimitRanger,ServiceAccount,DefaultStorage
+	--enable-bootstrap-token-auth=true \
+	--etcd-cafile=/var/lib/kubernetes/ca.crt \
+	--etcd-certfile=/var/lib/kubernetes/etcd.crt \
+	--etcd-keyfile=/var/lib/kubernetes/etcd.key \
+	--etcd-servers=https://127.0.0.1:2379 \
+	--kubelet-certificate-authority=/var/lib/kubernetes/ca.crt \
+	--kubelet-client-certificate=/var/lib/kubernetes/kube-api.crt \
+	--kubecelt-client-key=/var/lib/kubernetes/kube-api.key \
+	--kubelet-https=true \
+	--service-account-key-file=/var/lib/kubernetes/service-account.crt \
+	--service-cluster-ip-range=10.32.0.0/24 \
+	--tls-cert-file=/var/lib/kubernetes/kube-api.crt \
+	--tls-private-key-file=/var/lib/kubernetes/ca.crt \
+	--service-node-port-range=30000-32767 \
+	--service-node-port-range=30000-32767 \
+	--audit-log-maxage=30 \
+	--audit-log-maxbackup=3 \
+	--audit-log-maxsize=100 \
+	--auidt-log-path=/var/log/kube-api-audit.log \
+	--bind-address=0.0.0.0 \
+	--event-ttl=1h \
+	--encryption-provider-config=/var/lib/kubernetes/encryption-at-rest.yaml \
+	--v=2
+	Restart=on-failure
+	RestartSec=5
+
+	[Install]
+	WantedBy=multi-user.target
+	EOF
+
+	Step7 : Start the kube-api service:
+	systemctl start kube-apiserver
+	systemctl status kube-apiserver
+	journalctl -l -u kube-apiserver ( to debug startup issues)
+        systemctl daemon-reload
+	systemctl start kube-apiserver
+	systemctl status kube-apiserver
+	systemctl enable kube-apiserver
+	netstat -ntlp ( to see all services running)
+
+	Configuring Controller Manager
+	Controller manager interacts with the API server to move the current status to deisred status. Examples Controllers: replication Controller, Service Account & Token Controllers.
+
+	Step1 : generate certificates
+	openssl genrsa -out kube-controller-manager.key 2048
+           openssl req -new -key kube-controller-manager.key -subj
+"/CN=system:kube-controller-manager" - out kube-controller-manager.csr
+           openssl x509 -req -in kube-controller-manager.csr -CA ca.crt -CAkey
+ca.key -CAcreateserial -out kube-controller-manager.crt -days 1000
+
+	step2: Generating KubeConfig
+	
+	kubectl config set-cluster kubernetes-from-scratch
+	--certificate-authority=ca.crt \
+	--embed-certs=true \
+	--server=https://127.0.0.1:6442 \
+        --kubeconfig=kube-controller-manager.kubeconfig
+
+	kubectl config set-credentials system:kube-controller-manager \
+	--client-certificate=kube-controller-manager.crt \
+	--client-key=kube-controller-manager.key \
+	--embed-certs=true \
+	--kubeconfig=kube-controller-manager.kubeconfig
+
+	kubectl config set-context default \
+	--cluster=kubernetes-from-scratch \
+	--user=system:kube-controller-manager \
+	--kubeconfig=kube-controller-manager.kubeconfig
+
+	kubectl config use-context default
+-kubeconfig=kube-controller-manager.kubeconfig
+
+	step 3: Copying the files to kubernetes directory
+	cp kube-controller-manager.crt kube-controller-manager.key
+kube-controller-manager.kubeconfig /var/lib/kubernetes/
+
+	step4: Configuring SystemD service file:
+	cat <<EOF | sudo tee /etc/systemd/system/kube-controller-manager.service
+	[Unit]
+	Description=Kubernetes Controller Manager
+	Documentation=https://github.com/kubernetes/kubernetes
+
+	[Service]
+	ExecStart=/usr/local/bin/kube-controller-manager \\
+	--address=0.0.0.0 \\
+	--service-cluster-ip-range=10.32.0.0./24 \\
+	--cluster-cidr=10.200.0.0/16 \\
+	--kubeconfig=/var/lib/kubernetes/kube-controller-manager.kubeconfig \\
+	--authentication-kubeconfig=/var/lib/kubernetes/kube-controller-manager.kubeconfig \\
+	--authirization-kubeconfig=/var/lib/kubernetes/kube-controller-manager.kubeconfig \\
+	--leader-elect=true \\
+	--cluster-signing-cert-file=/var/lib/kubernetes/ca.crt \\
+	--cluster-signing-key-file=/var/lib/kubernetes/ca.key \\
+	--root-ca-file=/var/lib/kubernetes/ca.crt \\
+	--service-account-private-key-file=/var/lib/kubernetes/service-account.key \\
+	--use-service-account-credentials=true \\
+	--v=2
+	Restart=on-failure
+	RestartSec=5
+	
+	[Install]
+	WantedBy=multi-user.target
+	EOF
+
+	start Controller Manager:
+	cp /root/binaries/kubernetes/server/bin/kube-controller-manager
+/usr/local/bin
+	systemctl start kube-controller-manager
+	systemctl status kube-controller-manager
+	systemctl enable kube-controller-manager
+
+	
+       Configuring Scheduler
+       A scheduler watches for newly created Pods that have no Node assigned
+	Every Pod that the scheduler discovers, the scheduler becomes
+responsible for finding the best Node for that Pod to run on.
+		
+
+i	1. generate Certificates
+	openssl genrsa -out kube-scheduler.key 2048
+        openssl req -new -key kube-scheduler.key -subj
+"/CN=system:kube-scheduler" -out kube-scheduler.csr
+        openssl x509 -req -in kube-scheduler.csr -CA ca.crt -CAkey ca.key
+-CAcreateserial -out kube-scheduler.crt -days 1000
+	
+	2. generate Kubeconfig file:
+	
+	{
+	  kubectl config set-cluster kubernetes-from-scratch \
+	   --certificate-authority=ca.crt \
+	   --embed-certs=true \
+	   --server=https://127.0.0.1:6443 \
+	   --kubeconfig=kube-scheduler.kubeconfig
+
+	  kubectl config set-credentails system:kube-scheduler \
+	   --client-certificate=kube-scheduler.crt \
+	   --client-key=kube-scheduler.key \
+	   --embed-certs=true \
+	   --kubeconfig=kube-scheduler.kubeconfig 
+
+	  kubectl config set-contrext default \
+	   --cluster=kubernetes-from-scratch \
+	   --user=system:kube-scheduler \
+	   --kubeconfig=kube-scheduler.kubeconfig
+	
+	  kubectl config user-context defualt
+--kubeconfig=kube-scheduler.kubeconfig
+
+	 }
+	3 Copy the scheduler kubeconfig
+	
+	cp kube-scheduler.kubeconfig /var/lib/kubernetes/
+
+	4. Configuring SystemD service:
+	
+	  cat<< EOF | sudo tee /etc/systemd/system/kube-scheduler.service
+	  [Unit]
+	  Decsription=Kubernetes Scheduler
+	  Documentation=https://github.com/kubernetes/kubernetes
+
+	  [Service]
+	  ExecStart=/usr/local/bin/kube-scheduler \\
+	   --kubeconfig=/var/lib/kubernetes/kube-scheduler.kubeconfig \\
+	   --authentication-kubeconfig=/var/lib/kubernetes/kube-scheduler.kubeconfig
+\\
+	   --authorization-kubeconfig=var/lib/kubernetes/kube-scheduler.kubeconfig
+\\
+	   --bind-address=127.0.0.1 \\
+	   --leader-elect=true
+	  Restart=on-failure
+	  RestartSec=5 
+
+	  [Install]
+	  WantedBy=multi-user.target
+	  EOF
+
+	  Step 5: verification
+
+	  cp /root/binaries/kubernetes/server/bin/kube-scheduler /usr/local/bin
+	  systemctl start kube-scheduler
+	  systemctl status kube-scheduler
+	  systemctl enable kube-scheduler
+	
+	  Validating Cluster Status
+	 ------------------------------------------
+	  kubectl get componentstatus
+	  
+	  Step 1: Generate Certificate for Administrator user
+	 
+	  cd /root/certificates
+	  openssl genrsa -out admin.key 2048
+	  openssl req -new -key admin.key -subj "/CN=admin/O=system:masters"
+-out admin.csr
+	  openssl x509 -req -in admin.csr -CA ca.crt -CAkey ca.key
+-CAcreateserial -out admin.crt -days 1000
+
+	   Step 2: Create KubeConfig file
+
+	  Note: replace the IP address from the below snippet in line 5 with
+your IP address
+	  
+	  {
+	    kubectl config set-cluster kubernetes-from-scratch \
+	    --certificate-authority=ca.crt \
+	    --embed-certs=true \
+	    --server=https://134.209.159.37:6443 \
+	    --kubeconfig=admin.kubeconfig
+
+	    kubectl config set-credentials admin \
+	    --client-certificate=admin.crt \
+	    --client-key=admin.key
+	    --embed-certs=true \
+	    --kubeconfig=admin.kubeconfig 
+
+	   
+	    kubectl config set-context default \
+	    --cluster=kubernetes-from-scratch \
+	    --user=admin \
+            --kubeconfig=admin.kubeconfig
+	   
+	   kubectl config user-context default --kubeconfig=admin.kubeconfig 
+          }
+
+	 Step 3: verify Kubernetes Objects Creation
+
+	 mkdir ~/.kube && cp /root/certificates/admin.kubeconfig ~/.kube/config
+	kubectl create namespace kplabs
+	kubectl get namespace kplabs -o yaml
+	kubectl get serviceaccount --namespace kplabs
+	kubectl get serviceaccount default -o yaml -n kplabs
+	kubectl get secret --namespace kplabs
+	kubectl get componentstatus --kubeconfig=admin.kubeconfig
+	
+	Worker Node Configuration
+	-----------------------------------------------
+	There are two important components to configure as part of the worker node. kubelet and kube-proxy
+	
+	Pre-Requisites
+	-------------------
+	setenforce 0
+	sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+	yum -y install docker && systemctl start docker && systemctl enable
+docker
+	yum -y install socat conntrack ipset
+	sysctl -w net.ipv4.conf.all.forwading=1
+
+	cd /root/binaries/kubernetes/node/bin/
+	cp kube-proxy kubectl kubelet /usr/local/bin
+
+	step 1: Generate kubelet certificate fr Worrker Node.
+	
+	Note:
+
+	replace the IP Address and Hostname filed in the below configurations according to environment. 
+	Run this in the Kubernetes Master Node
+	cd /root/certificates
+
+	cat > openssl-kplabs-cka-worker.cnf <<EOF
+	[req]
+	req_extensions = v3_req
+	distinguished_name = req_distinguished_name
+	[req_distinguished_name]
+	[ v3_req ]
+	basicConstraints - CA:FALSE
+	keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+	subjectAltName = @alt_names
+	[alt_names]
+	DNS.1 = kplabs-cka-worker
+	IP.1 = WORKER-NODE-IP
+	EOF
+
+	openssl genrsa -out kplabs-cka-worker.key 2048
+	openssl req -new -key kplabs-cka-worker.key -subj
+"/CN=system:node:kplabs-cka-worker/O=system:nodes" -out kplabs-cka-worker.csr -config openssl-kplabs-cka-worker.cnf
+	openssl x509 -req -in kplabs-cka-worker.csr -CA ca.crt -CAkey ca.key
+-CAcreateserial -out kplabs-cka-worker.crt -extensions v3_req -extfile
+openssl-kplabs-cka-worker.cnf -days 1000
+	
+	Step 2: Generate kube-proxy certificate:
+	
+	openssl genrsa -out kube-proxy.key 2048
+	openssl req -new -key kube-proxy.key -subj "/CN=system:kube-proxy" -out kube-proxy.csr
+	openssl x509 -req -in kube-proxy.csr -CA ca.crt -CAkey ca.key
+-CAcreateserial -out kube-proxy.crt -days 1000
+
+	Step 3 : Copy certificates to Worker Node:
+
+	This can either be manual approach or via SCP. certificates:
+	kubelet, kube-proxy and CA certificate.
+
+	in-case you want to autoamte it, then following configuration can be
+used. In the demo, we had made used 
+	in-case you want to trasnfer file from master worket node, then you can make use of the folowing app
+
+	Worker Node:
+	nano /etc/ssh/sshd_config
+	PsswordAuthentication yes
+	systemctl restart sshd
+	useradd zeal
+	passwd zeal5872#
+
+	Master Node:
+	scp kube-proxy.crt kube-proxy.key kplabs-cka-worker.crt
+kplabs-cka-worker.key ca.crt zeal@IP-WORKER-NODES:/tmp
+	
+	worker Node:
+	mv kube-proxy.crt kube-proxy.key kplabs-cka-worker.crt
+kplabs-cka-worker.key ca,crt /root/certificates
+	
+	step4: Move certificates to specific Location
+	cd /root/certificates
+	mkdir /var/lib/kubernetes
+	cp ca.crt /var/lib/kubernetes
+	mkdir /var/lib/kubelet
+	mv kplabs-cka-worker.crt kplabs-cka-worker.key kube-proxy.crt
+kube-rpoxy.key /var/lib/kubelet/
+
+	step 5 Generate Kubelet Configuration YAML File:
+
+	cat <<EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml
+	kind: KubeletConfiguration
+	apiVersion: kubelet.config.k8s.io/v1beta1
+	authentication:
+	  anonymous:
+	    enabled: false
+	  webhook:
+	    enabled: true
+	  x509:
+	    clientCAFile: "/var/lib/kubernetes/ca.crt"
+	authorization:
+	   mode: Webhook
+	clusterDomain: "cluster.local"
+	clusterDNS:
+	- "10.32.0.10"
+	runtimeRequestTimeout: "15m"
+	EOF
+
+	step6 : Generate systemd service file for kubelet:
+	
+	cat <<EOF | sudo tee /etc/systemd/system/kubelet.service
+	[Unit]
+	Description=Kubernetes Kubelet
+	Documentation=https://github.com/kubernetes/kubernetes
+	After=docker.service
+	Requires=docker.service
+
+	[Service]
+	ExecStart=/usr/local/bin/kubelet \\
+	 --config=/var/lib/kubelet/kubelet-config.yaml \\
+	 --image-pull-progress-deadline=2m \\
+	 --kubeconfig=/var/lib/kubelet/kubeconfig \\
+	 --tls-cert-file=/var/lib/kubelet/${HOSTNAME}.crt \\
+	 --tls-private-key-file=/var/lib/kubelet/${HOSTNAME}.key \\
+	 --network-plugin=cni \\
+	 --regster-node=true \\
+	 --v=2 \\
+	 --cgroup-driver=systemd \\
+	 --runtime-cgroups=/systemd/system.slice \\
+	 --kubelet-cgroups=/systemd/system.slice
+	Restart=on-failure
+	RestartSec=5
+
+	[Install]
+	WantedBy=multi-user.target
+	EOF
+
+	Step 7 : Generate the Kubeconfig file for Kubelet
+
+	cd /var/lib/kubelet
+	cp /var/lib/kubernetes/ca.crt .
+	SERVER_IP = IP-OF-API-SERVER
+
+	{
+	  kubectl config set-cluster kubernetes-from-scratch \
+	   --certificate-authjority=ca.crt \
+	   --embed-certs=true \
+	   --server=https://${SERVER_IP}:6443 \
+	   --kubeconfig=kplabs-cka-worker.kubeconfig
+
+	  kubectl config set-credentails system:node:kplabs-cka-worker \
+	   --client-certificate=kplabs-cka-worker.crt \
+	   --client-key=kplabs-cka-worker.key \
+	   --embed-certs=true \
+	   --kubeconfig=kplabs-cka-worker.kubeconfig
+	
+	  kubectl config set-context default \
+	   --cluster=kubernetes-from-scratch \
+	   --user=system:node:kplabs-cka-worker \
+	   --kubeconfig=kplabs-cka-worker.kubeconfig
+
+	 kubectl config user-context default
+--kubeconfig-kplabs-cka-worker.kubeconfig
+	
+	mv kplabs-cka-worker.kubeconfig kubeconfig
+
+	part 2 Kube-Proxy
+
+	Step 1: Copy Kube Proxy certificate to Directory:
+	  mkdir /var/lib/kube-proxy
+
+	Step 2: generate KubeConfig file:
+
+	{
+	   Kubectl config set-cluster kubernetes-from-scratch \
+	     --certificate-authority=ca.crt \
+	     --embed-certs=true \
+	     --server=https://${SERVER_IP}:6443 \
+	     --kubeconfig=kube-proxy.kubeconfig
+		
+	   kubectl config set-credentials system:kube-proxy \
+	    --client-certificate=kube-proxy.crt \
+	    --client-key=kube-proxy.key \
+	    --embed-certs=true \
+	    --kubeconfig=kube-proxy.kubeconfig
+
+	   kubectl config set-context default \
+	     --cluster=kubernetes-from-scratch \
+	     --user=system:kube-proxy \
+	     --kubeconfig=kube-proxy.kubeconfig
+
+	  kubectl config use-context default -kubeconfig=kube-proxy.kubeconfig
+	}
+	mv kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
+
+
+	Step 3: generate kube-proxy configuration file:
+		
+	   cat <<EOF | sudo tee /var/lib/kube-proxy/kube-proxy-config.yaml
+	   kind: KubeProxyConfiguration
+	   apiversion: kubeproxy.config.k8s.io/v1alpha1
+	   clientConnection:
+	     kubeconfig: "/var/lib/kube-proxy/kubeconfig"
+	  mode: "iptables"
+	  clusterCIDR: "10.200.0.0.16"
+	  EOF
+
+	Step 4: Create kube-proxy service file:
+	  cat <<EOF | sudo tee /etc/systemd/system/kube-proxy.service
+	  [Unit]
+	  Description=Kubernetes Kube Proxy
+	  Documentation=https://github.com/kubernetes/kubernetes
+
+	  [Service]
+	  ExecStart=/usr/local/bin/kube-proxy \\
+	    --config=/var/lib/kube-proxy/kube-proxy-config.yaml
+	 Restart=on-failure
+	 RestartSec=5
+
+	  [Install]
+	  WantedBy=multi-user.target
+	  EOF
+
+	  Step 5
+	
+	  systemctl start kubelet
+	  systemctl start kube-proxy
+	  systemctl enable kubelet
+	  systemctl enable kube-proxy
+	  
+	  Configuring Networking
+	  ----------------------------------
+	  note: step1 to 3 will be on worker node step4 will be on Master node.
+	  step 1 : Download CNI Plugins:
+https://github.com/containernetworking/plugins/releases/download/v0.8.6/cni-plugins-linux-amd64-v0.8.6.gz
+
+	  step2: configure Base Directories:
+	  mkdir -p \
+	  /etc/cni/net.d \
+	  /opt/cni/bin \
+	  /var/run/kubernetes 
+
+	  step3: Move CNI tar File and Extract it.
+	  
+	  mv cni-plugins-linux-amd64-v0.8.6.tgz /opt/cni/bin
+	  cd /opt/cni/bin
+	  tar -xzvf cni-plugins-linux-amd64-v0.8.6.tgz
+
+	  step4: Configuring weave ( Run this step on Master Node)
+	  kubectl apply -f
+"https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 |
+tr -d '\n')&env.IPALLOC_RANGE=10.200.0.0/16"
+	  
+	  RBAC for API to kubelet Communication
+	  -------------------------------------------
+	  cat<<EOF | kubectl apply -f -
+	  apiVersion: rbac.authorization.k8s.io/v1beta1
+	  kind: ClusterRole
+	  metadata:
+	    annotations:
+	     rbac.authorization.kubernetes.io/autoupdate: "true"
+	    labels:
+	     kubernetes.io/bootstrapping: rbac-defaults
+	    name: system:kube-apiserver-to-kubelet
+	  rules:
+	    -apiGroups:
+	     - ""
+	     resources:
+	      - nodes/proxy
+	      - nodes/stats
+	      - nodes/log
+	      - nodes/spec
+	      - nodes/metrics
+	     verbs:
+	      - "*"
+	   EOF
+	   cat <<EOF | kubectl apply -f -
+	   apiVersion: rbac.authorization.k8s.io/v1beta1
+	   kind: ClusterRoleBinding
+	   metadata:
+	     name: system:kube-apiserver
+	     namespace: ""
+	   roleRef:
+	     apiGroup: rbac.authorization.k8s.io
+	     kind: ClusterRole
+	     name: system:kube-apiserver-to-kubelet
+	   subjects:
+	     - apiGroup: rbac.authorization.k8s.io
+	       kind: User
+	       name: kube-apiserver
+	   EOF
+           
+	   Configuring DNS in Cluster
+	   ---------------------------------
+	   kubectl cluster-info
+	   wget
+https://raw.githubusercontent.com/zealvora/certified-kubernetes-administrator/master/Domain%20-%20Installations%2CConfiguration%2CValidation/coredns.yaml
+	   kubectl get pods -n kube-system
+	   Kubelet Preferred Address Types
+	   ------------------------------------
+	   on kubectl-exec, kube-apiservefr initiate the connection with the
+kubelet running on the host. In order to communicate, kube-apiserver uses ways
+like IP address, hostnames of the nodes 
+           Backup & Restore etcd
+	   -------------------------------------
+	   backing up an etcd cluster can be accomplished in tow ways:
+	   - etcd built-in snapshot
+	   - volume snapshot
+	  
+      62 Kubernetes Events
+	 Kubernetes Events are created when other resources have state changes,
+errors , or other messages that should be broadcast to the system
+	It proviedes insight into what is happening insite a cluster such as
+what decsiins were made by the scheduler or why some pods were evicted from the
+node.
+	kubectl get events
+	All the events are stored in the master server.
+	To avoid filling up master's disk, a retention policy is enforced:
+eventars are removed one hour after the last occurrence.
+	To provide longer history and aggregation capabilities, a third part
+solution should be installed to capture events.
+	Events are namespaced.
+	Hence if you want even a pod in "kplabs-namespace" then you will have to
+explicitly specify the --namespace kplabs-namespace.
+	To see events from all namespaces, you can use the -all-namespaces
+argument.
+      63 Monitoring Cluster Components
+	 One of the important functionalities of a kubelet is to retrieve
+metrics aggregate and expose them through the kubelet summary API
+	This is achieved with CAdvisor
+	kube-state-metrics is a simple service that listens to the kubernetes
+API server and generates metrics about the state of the objects.
+	It is not focused on the helath of the individul kubernetes components,
+but rather on the health of the various objects inside, such as deployment,
+nodes and pods.
+	git clone https://github.com/kubernetes-incubator/metrics-server.git
+	cd metric-server/
+	kubectl apply -f 1.8+/
+	vi metric-server-deployment.yaml
+	 command:
+    		- /metrics-server
+    		- --kubelet-insecure-tls
+    		- --kubelet-preferred-address-types=InternalI
+
+       64 Docker logging drivers
+	  Unix and Linux commands typically open three I/O stream when they run
+called STDIN, STDOUT and STDERR
+	  docker container run -d --name mybusybox busybox ping google.com
+	  docker ps
+	  docker logs mybusybox ( to see stdout ad\nd stderr )
+	  docker info | grep -i "logging driver"
+	  if you dont associated a driver ir will asign to default json driver.
+	  docker inspect mybusybox ( and check for Logpath to get location of
+where files are getting stored)
+	  docker container run -d --name mycustom --log-driver none busybox ping
+google.com
+	  docker logs mycustom
+	  Error response from daemon: configured logging driver does not support
+reading
+	  There are lot of logging driver options available in Docker, some of
+them include:
+	  json-file
+	  none
+	  syslog
+	  local
+	  journald
+	  splunk
+	  awslogs
+	  The docker logs command is not available for drivers other than
+json-file and journald.
+      65 Monitoring Application Logs
+	 kind: Pod
+	 apiVersion: v1
+	 metadata:
+	    name: pod01
+	 spec:
+	   containers:
+	     - name: ping-container
+	       image: busybix
+	       command: ["ping"]
+	       agrs: ["google.com"]
+	 
+	  kubectl apply -f pod-logging.yaml
+	  kubectl get pods
+	  kubectl lofs pod01
+	  
+	     kind: Pod
+         apiVersion: v1
+         metadata:
+            name: pod01
+         spec:
+           containers:
+             - name: ping-container-domain
+               image: busybix
+               command: ["ping"]
+               agrs: ["google.com"]
+	     - name: ping-container-ip
+	       image: busybox
+	       command: ["ping"]
+	       args: ["8.8.8.8"]
+
+          kubectl apply -f multi-contaimner-pod-logging.yaml
+	  kubectl get pods
+ 	  kubectl logs pod02 ping-conatiner-domain  
+          kubectl logs pod02 ping-container-ip
+	  
+        69 Monitoring Cluster Component Logs
+	   If we are making use of systemd, then we can view the component level
+logs with journalctl
+	   It provides insight into what is happening inside a cluster, such as
+what decisions were made by scheduler or why some pods were evicted from the
+node.
+	   /var/logs/kube-apiserver.log,
+kube-scheduler.log,kube-controller-manager.log, kubelet.log kube-proxy.log
+	   For the systemd based system we may need to use journalctl instead.
+	   journalctl -f -u kube-apiserver
+	   journalctl --seince "2019-09-17 14:10:10" --until "2019-09-17
+15:00:00" -u kube-apiserver
+	   
+	70: Troubleshooting
+	    Issue : Application failure : NodePort Service with 2 Pod1 and Pod2 not registered.
+	   `	 
+	   kubectl get service
+	   kubectl describe service kplabs-service
+	   kubectl get pods --namespace teama
+	   (check the selector )
+	   kubectl decsribe pods nginx-pod-first --namespace teama
+	   (did not have the required label)
+	   kubectl apply -f application-failure.yaml
+	   (still the namespace of service and pods is diffrent)
+
+	   issue2: Conttrol Plane failure
+	   Verify if all the cluster level components are healthy
+	   	kubectl get componentstatus
+	   verify and dumo cluster info
+	   	kubectl cluster-info dump
+	   check the logs of individual components
+	 	journalctl -l kube-apiserver
+	   
+	   issue3: version skew policy support
+	   kube-apiserver - in HA clusters, the newest and oldest kube-apiserver
+instance must be within one minor versions ie either if newest is v1.15 then
+other supported instance is either v1.15 or v1.14
+	   kubelet must not be newer than kube-apiserver and may be up to two
+minor versions older e.g if newest api-server is v1.15 the kubelet version can be
+v1.15, 1.14 or 1.13
+	   kube-controller,kube-schduler and cloud-controller manager - Must not
+be newer than the kube-apiserver. Expected to match the kube-apiserver minor
+version. can be upto one monir version older (specifically during upgrades)
+	    Draining worker nodes
+	    kubectl drain $NODENAME --ignore-daemonsets --d;ete-local-data
+	    This will gracefully terminate all the pods on the node while
+marking the nodes as unschedulable. For pods with a replica set, the pod will be
+replaced by a new pod which will be schedukled to a new node. Static Pods will
+be terminated.
+	    Taint Based Evictions
+	    The worker nodes are automatically tainted in Kubernetes based on
+specific node conditions:
+		node.kubernetes.io/not-ready
+		node.kubernetes.io/unreachable
+		node.kubernetes.io/out-of-disk
+		node.kubernetes.io/memory-pressure
+		node.kubernetes.io/disk-pressure
+		node.kubernetes.io/network-unavailable
+		node.kubernetes.io/unschedulable
 		
