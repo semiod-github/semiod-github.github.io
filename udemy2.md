@@ -6,9 +6,9 @@
 	(https://github.com/zealvora/certified-kubernetes-administrator)
      2. Container Orchestration is all about managing the life cycles of 
 	containers, especially in large, dynamic environments.
-        Conatiner orchestration can be used to perfrom lots of tasks, 
+        Container orchestration can be used to perform lots of tasks, 
 	some of them include:
-        - Provisioning and deploymet of containers
+        - Provisioning and deployment of containers
         - Scaling up or removing containers to spread application load evenly
 	- Movement of containers from one host to another if there is a 
 	shortage of resources
@@ -37,11 +37,11 @@
      5. A pod in kubernetes represents a group of one or more application 
 	containers, and some shared resources for those containers.
 	-IP address, volume and containerized apps.
-	Conatiners within a Pod share an Ip address and port space and can 
-	find ecah other via localhost.
+	Containers within a Pod share an Ip address and port space and can 
+	find each other via localhost.
 	A pod always runs on a Node
 	A Node is a worker machine in Kubernetes
-	Ecah Node is managed by the Master
+	Each Node is managed by the Master
 	A Node can have multiple Pods.
      6. Kubernetes Objects is basically a record of intent that you pass on to
 	 the Kubernetes cluster. Once you create the object, kubernetes system 
@@ -55,18 +55,18 @@
 	cloud-controller-manager, kube-apiserver, etcd, kube-scheduler.
 	kube-apiserver- Component on the master that exposes the kubernetes API.
 	etcd - key value store used as kubernetes backing store for all cluster data.
-	kube-scheduler - Component on gthe master that wtaches newly created 
+	kube-scheduler - Component on the master that watches newly created 
 	pods that have no node assigned and selects a n ode for them to run on.
 	kube-controller-manager - Responsible for controlling various aspects,
 	 including Node Controllers: Responsible when node goes down. 
 	Replication controllers, endpoint controllers, Service account and Token controllers.
 	cloud-controller-manager - Runs controllers that interact with the underlying cloud providers.
-     8. Kubernetes Node components : kubelet An agent that runs on ecah node 
-	in the cluster. It makes sure that conatiners are running in a pod. 
-	Kube-proxy:  Acts as a network proxy which maintaines network rules 
-	on the host and performing connection forwading. 
-	Conatiner Runtime : Software which is respon sible for running containers.
-	 Supported runtimes, docker, conatinerd, rktlet and others.
+     8. Kubernetes Node components : kubelet An agent that runs on each node 
+	in the cluster. It makes sure that containers are running in a pod. 
+	Kube-proxy:  Acts as a network proxy which maintains network rules 
+	on the host and performing connection forwarding. 
+	Container Runtime : Software which is responsible for running containers.
+	 Supported runtimes, docker, containerd, rktlet and others.
      9. etcd : etcd reliably stores the configuration data of the kubernetes 
 	cluster, representing the state of the cluster ( what nodes exist in 
 	the cluster, what pods should be running, which nodes they are running
@@ -76,11 +76,11 @@
 	Anything that you read while running kubectl get pods is stored in etcd
 	Any node crashing or process dying causes values in etcd to be changed.
 	Whenever you create something with kubectl create/ kubectl run will create an entry in the etcd.
-     10. Kube-api-server serevrs acts as a gateway to the kubernetes cluster. 
+     10. Kube-api-server servers acts as a gateway to the kubernetes cluster. 
 	The API serer is the only kubernetes component that connects to etcd;
 	 all the other components must go through the API Server to work with 
 	the cluster state. The API Server is also responsible for the authentication
-	 and authorization mechansim. All API clients should be authenticaed 
+	 and authorization mechanism. All API clients should be authenticated 
 	in order to interact with the API Server.
      11. Flow : 1 kubectl writes to the API server 
 	( kubectl run mywebserver --image=nginx) 
@@ -89,23 +89,25 @@
 	4 Scheduler decides which node the pod should run and return data to 
 	API server. API will in-turn write it back to etcd. 
 	5: API server will invoke the node decided by the scheduler 
-	6: Kubelet communicates to the docker daemon via Docker socket to create the conatiner. 
+	6: Kubelet communicates to the docker daemon via Docker socket to create
+the container. 
 	7: Kubelet will update the status of the POD back to the API server. 
 	8: API server will write the status details back to etcd.
-     13: API Primitives : Alpha level - version name contains alpha. Maybe by buggy. Enabling the feature may expose bugs. Disbaled by defau;t
+     13: API Primitives : Alpha level - version name contains alpha. Maybe by
+buggy. Enabling the feature may expose bugs. Disabled by default
 	Beta level : The version names conatin beta. Code is well tested.Enabling the feature is considered safe, Enabled by default. Recommended for only non-business-critical uses because of potential for incompatible changes in subsequent releases.
 	Stable Level : the version name os vX where X is an integer. Recommended to use in production environments.
-     14: yaml file key fileds: apiVersion - Version of API. Kind - Kind of object you want to create. metadata name - Name of the object that uniquely identifies it. spec - Desired state of the object.
+     14: yaml file key fields: apiVersion - Version of API. Kind - Kind of object you want to create. metadata name - Name of the object that uniquely identifies it. spec - Desired state of the object.
 	https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/
 	https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
      15: kube-scheduler : some Factors for scheduling :		Resource requirements, hardware/software policy constraints, Affinity & Anti-Affinity and Data Locality.
-     16: ENTRYPOINT : The best use for ENTRYPOINT is to set the image's main cpmmand. ENTRYPOINT doesn't allow you to override the command.
+     16: ENTRYPOINT : The best use for ENTRYPOINT is to set the image's main command. ENTRYPOINT doesn't allow you to override the command.
 	FROM busybox
 	ENTRYPOINT ["/bin/ping"]
 	#CMD ["sh"]
 	no we can append to entry point but cannot override
-	e.g docker conatiner run -dt --name base02 base02 -c 20 google.com
-     17. Command and Arguments : In kubernetes we can overrride the default entrypoint and CMD with command and args filed.
+	e.g docker container run -dt --name base02 base02 -c 20 google.com
+     17. Command and Arguments : In kubernetes we can override the default entrypoint and CMD with command and args filed.
 	 Docker Filed Name ENTRYPOINT -> Kubernetes Filed name -> Command that will be run by container.
 
 	Docker Field Name CMD -> Kubernetes Filed Name args -> Argument passed to the container.
@@ -120,19 +122,20 @@
 	      command: ["sleep"]
 	      args: ["3600"]
       
-    18. When there is an entrypoint and CMD set for a Docker image and if we are not manually overriding it at K8s manifest level, then dinal decsions is to use the default image specifications,
+    18. When there is an entrypoint and CMD set for a Docker image and if we are
+not manually overriding it at K8s manifest level, then final decisions is to use the default image specifications,
      Image Entrypoint -Sleep
      Image Command - 3600
      Container Command ping -c5 google.com 
-     Conatiner Argument - Not Set
+     Container Argument - Not Set
      Final ping -c5 google.com
 
     19. kubectl explain pod.spec
     20. Docker EXPOSE : Its functions as a type of document between person who builds the image and the person who runs the container, about which ports are intended to be published.
 	Kubernetes ports is same as Docker EXPOSE.
 	kubectl run nginx --image=nginx
-	kubectl run nginx --image-mginx --port=80
-	kubectl run nginx --image=mginx --port=80 --dry-run=client -o yaml
+	kubectl run nginx --image-nginx --port=80
+	kubectl run nginx --image=nginx --port=80 --dry-run=client -o yaml
 	kubectl delete pod nginx
 	kubectl delete pod --all
 
@@ -153,7 +156,7 @@
 	
 	kubectl create deployment nginx-deploy --image=nginx
 	kubectl set image deployment nginx-deployment nginx=nginx:1.91 --record
-	kubectl scale deploymengt nginx-deployment --replicas 10
+	kubectl scale deployment nginx-deployment --replicas 10
 	kubectl rollout undo deployment nginx-deployment
     24: Daemon Set can ensure that all Nodes run a copy of a Pod. As nodes are added to the cluster, Pods are added to them.
 	kubectl get daemonset
@@ -191,7 +194,7 @@
 		  - name: with-node-affinity
 		    image: nginx
     27: Pod Affinity e.g what if i want to run BackEnd pod in same node as AppA pod ?
-	  Step1 : Pod Selector : Here we select the POD based on which the decsions will be made where we want to place the current Pod.
+	  Step1 : Pod Selector : Here we select the POD based on which the decisions will be made where we want to place the current Pod.
 	  Step2: Topology : It can mean same place if we look at the one or region level (same AZ/ same region).  It can also mean different place if we look at the host level.
 	  Step3: Same place as the other Pod Yes (Pod Affinity ) or No ( Pod Anti-Affinity)
 	   affinity:
@@ -210,8 +213,8 @@ ceution
                     image: nginx
     28: Resource limit and Request : if you schedule a large application in a node which has limited resource, then it would soon lead to OOM or others and will lead to downtime.
 	  Request and Limits are two ways in which we can control the amount of resource that can be assigned to a pod ( resource like CPU and memory)
-	  Requests: Gauranteed to get.
-	  Limits: Makes sure that conatiner does not take resources above a specific value.
+	  Requests: Guaranteed to get.
+	  Limits: Makes sure that container does not take resources above a specific value.
 	  Kubernetes Scheduler decided the ideal node to run the pod depending on the requests and limits.
 	  spec:
 		containers:
@@ -231,9 +234,9 @@ ceution
 	
 	
     29: Scheduling Pods without Scheduler (Static Pods)
-	   You can directly inform the kubeket that it needs to run a specific Pod.
+	   You can directly inform the kubelet that it needs to run a specific Pod.
 	   There are multiple ways in which you can tell kubelet to run a pod.
-	   Pod created directly without schedulers are also reffered as static Pods.
+	   Pod created directly without schedulers are also referred as static Pods.
 	   system status kubelet  - to know kubelet status
 	   cd /etc/systemmd/system/kubelet.service.d/
 	   look for file 10-kubeadm.conf
@@ -259,12 +262,13 @@ ceution
 
     31.  Multi-Container POD Patterns 
 		Sidecar - Running multiple container as part of a pod in a single node.
-		Ambassador Pattern - Is a type of sidecar pattern were the second conatiner is primarily used to proxy the requests.
+		Ambassador Pattern - Is a type of sidecar pattern were the
+second container is primarily used to proxy the requests.
 		Adapter Pattern is generally used to transform the application output to standardize/normalize it for aggregation.
 		(https://docs.google.com/document/d/1Uoebi-g-Arua9myZCzK3Kx-rpJsPZ9NK9oyWG8MgdxY/edit?usp=sharing)
     32 Service
 		Kubernetes Service can act as an abstraction which can provide a single IP address and DNS through which pods can be accessed.
-		THis layer of abstraction allows us to perform lot of operations like load balancing, scaling of pods and others.
+		This layer of abstraction allows us to perform lot of operations like load balancing, scaling of pods and others.
 		kubectl get service
 		There are several types of Kubernetes Services which are available:
 		NodePort, ClusterIP, LoadBalancer, ExternalName.
@@ -277,7 +281,7 @@ ceution
 		Create a service - Exposing Pod
 		kubectl expose pod nginx --name nginx-svc --port=80 --target-port=80
 		create a service - Expose Deployment
-		kubectl expsose deployment nginx --name nginx-dep-svc --port=80 --target-port=8000
+		kubectl expose deployment nginx --name nginx-dep-svc --port=80 --target-port=8000
 		create a NodePort Service
 		kubectl expose deployment nginx --name nodeport-svc --port=80 --target-port=8000 --type=NodePort
      33. Ingress :- kubectl get ingress
@@ -286,13 +290,13 @@ ceution
 	Ingress can provide various features which includes
 	Load Balancing, SSL Termination and Named=based virtual hosting.
 	There are two sub-components when we discuss about Ingress : Ingress Resource, Ingress Controllers. 
-	Ingress Resource conatins set of routing rules based on which traffic is routed to a service.
+	Ingress Resource contains set of routing rules based on which traffic is routed to a service.
 	Ingress Controller takes care of the Layer 7 proxy to implement ingress rules.
 	You must have an ingress controller to satisfy an Ingress. Only creating an Ingress resource has no effect.
      34. Helm : Package manager for Kubernetes.
 	Helm client and Tiller
      35. Named based Virtual Hosting
-	Named-based virtual hosts support routing HTTP traffic to multiple host names at the same IP address. The request are routed based on the HTTP host-hreader.
+	Named-based virtual hosts support routing HTTP traffic to multiple host names at the same IP address. The request are routed based on the HTTP host-header.
      36. Kubernetes supports multiple virtual clusters backed by the same physical cluster. These virtual clusters are called namespaces.
      kubectl get namespace
      kubectl get pods --namespace kube-system
@@ -305,7 +309,7 @@ ceution
 	kubectl get serviceaccount -namespace Kplabs
 	Default service account is automatically created when you created a new namespace.     
         kubectl get sa default -o yaml
-	PODS are automically mounted with the default service accounts.
+	PODS are automatically mounted with the default service accounts.
 	kubectl cfreate sa kplabs
 	kubectl get secret
 	kubectl run nginx-sa --image="nginx" --serviceaccount="kplabs"
@@ -334,7 +338,7 @@ ceution
 	Either of the keys can be used to encrypt a message, the opposite key from the 
 	one used to encrypt the message is used for decryption.
 	ssh-keygen  ( check keys in ~/.ssh dir)
-        Asymmetric key encryption is used by varipus protocols PGP, SSH, Bitcoin, TLS and S/MIME.
+        Asymmetric key encryption is used by various protocols PGP, SSH, Bitcoin, TLS and S/MIME.
      41. Understanding SSL/TLS
 	HTTPS: Communication is encrypted using Transport Layer Security(TLS)
 	SSL2.0 -1995, SSL3.0-1996,TLS1.0-1999, TLS11.1-2006, TLS1.2-2008,
@@ -347,11 +351,11 @@ ceution
 	negotiation. Asymmetric key encryption is used to generate a new
 	temporary symmetric key which will be used for secure communication.
      42. Creating TLS Certificate for Authentication
-	Setup Authentocation based on X509 Client Certificate
+	Setup Authentication based on X509 Client Certificate
 	zeal-key(openssl)->zeal.csr(openssl)->zeal.csr(k8s object)->k8s
 	CA->zeal.crt
 	zeal-key(openssl) +  zeal.crt -> Authenticate->kube-api
-	Create docker conatiner in linux box
+	Create docker container in linux box
 	install openssl
 	install kubectl and copy ~/.kube/config
 	Pre-Requisite:
@@ -449,7 +453,7 @@ ceution
 
      45. API Groups, Resources and Verbs
 	API Groups make it easier to extend the Kubernetes API.
-	Currently there are serveral groups available : 
+	Currently there are sevral groups available : 
 	The Core group, often referred to as the legacy group, is at
 	the REST path /api/v1
 	The named groups are at REST path /apis/$GROUP_NAME/$VERSION
@@ -461,7 +465,7 @@ ceution
 	Verbs are generally the type of requests that can be sent to a
 	resource.
 	e.g Get, list, create, update, patch, watch and others.
-	kubectl --context=zeal-contect run --generator=run-pod/v1 
+	kubectl --context=zeal-context run --generator=run-pod/v1 
 	nginx2 --image=nginx ( used to create Pod as default run 
 	without generator considers deployment)
      46 Namespaces - Access Control
@@ -620,18 +624,18 @@ ceution
 	1. View Kubeconfig
 	kubectl config --kubeconfig=base-config view
 
-	2. Get current conext information:
+	2. Get current context information:
 	kubectl config --kubeconfig=base-config get-contexts
 
-	3. Switch Conexts:
+	3. Switch Contexts:
 	kubectl config --kubeconfig=base-config use-context dev-frontend
 
     50 Kubernetes Secrets
 	Hard coding of Credentials issues:
-	1. Anyone habing access to the container repository can easily fetch the
+	1. Anyone having access to the container repository can easily fetch the
 	credentials.
 	2. Developer needs to have credentails of production systems.
-	3. Update of credentails will lead to a new docker image being built.
+	3. Update of credentials will lead to a new docker image being built.
 	Solution :  Keep secrets in Central store, next APP fetches the
 	credentials from central store, and next is authentication with secrets
 	say with a DB.
@@ -641,7 +645,7 @@ ceution
 
 	A kubernetes secret is an object that contains a small amount of
 	sensitive data such as password, a token or a key.
-	- Allows customers to store secrets centrally to reduce risk of expsoure
+	- Allows customers to store secrets centrally to reduce risk of exposure
 	- Stored in etcd database.
 
 	kubectl create secret [TYPE][NAME][DATA]
@@ -681,7 +685,7 @@ ceution
 			password: mypassword
 
      51 Mounting Secrets in Containers
-	2 approaches to acheive this
+	2 approaches to achieve this
 	1. Volumes
 	2. Environment Variable.
 	
@@ -707,7 +711,7 @@ ceution
 	metadata:
 		name: secret-env
 	spec:
-		conatiners:
+		containers:
 		- name: secret-env
 		  image: nginx
 		  env:
@@ -721,19 +725,19 @@ ceution
 
 	52 Docker Volumes
 	  By default all files created inside a container are stored on a
-	  writable conatiner layer. 
-	  Challenges with files in Conatiner Writable layer
-	  1) The data doesn't persist when the conatiner no longer eists, and it 
-	  can be difficuly to get the data out of the container if another
+	  writable container layer. 
+	  Challenges with files in Container Writable layer
+	  1) The data doesn't persist when the container no longer eists, and it 
+	  can be difficulty to get the data out of the container if another
 	  process needs it
-	  2) Writing into a conatiner writable layer requires a storage driver
+	  2) Writing into a container writable layer requires a storage driver
 	  to manage the filesystem. The storage driver provided a union
-	  filesystem using the linux kernel. This extar abstraction reduces
+	  filesystem using the linux kernel. This extra abstraction reduces
 	  performance as compared to using data volumes, which write directly to
 	  the host filesystem.
 	  
-	  Docker has tow options for containers to store files in the host
-	  machine, so that the files are persisted even after the conatiner
+	  Docker has two options for containers to store files in the host
+	  machine, so that the files are persisted even after the container
 	  stops: volumes, and bind mounts.
 	  if you're running Docker on linux you can also used a tmpfs mount.
 	  
@@ -744,18 +748,18 @@ ceution
 	  cd /var/lib/docker/volumes/myvolume/_data
 	  docker volume rm myvolume
 	  
-	  A given volume can be mounted into multiple containers simultanesously
-	  when no running conatiner is using a volume, the volume is still
+	  A given volume can be mounted into multiple containers simultaneously
+	  when no running container is using a volume, the volume is still
 	  available to Docker and is not removed automatically.
 	  
 	  when you mount a volume, it may be named or anonymous. Anonymous
 	  volumes are not given an explicit name when they are first mounted
-	  into a container, so Docker gives them a ramdom name that is guranteed
+	  into a container, so Docker gives them a random name that is guaranteed
 	  to be unique within a given Docker host.
 
 	53 Volumes in Kubernetes
 	   Challenges : On-disk files in a container are ephemeral
-	   When there are multiple conatiners who wants to share data, it
+	   When there are multiple containers who wants to share data, it
 	   becomes a challenge.
 	   One of the benefits of Kubernetes is that it supports multiple types 
 	   of volumes : EBS, cider, glusterfs, local , nfs etc
@@ -765,7 +769,7 @@ ceution
 	   metadata:
 		named: demopod-volume
 	   spec:
-		conatiners:
+		containers:
 		- image: nginx
 		  name: test-container
 		  volumeMounts:
@@ -883,7 +887,7 @@ ceution
 	Privilege)
 	In-case of container breakouts, attacker can ger root privileges to your
 	entire system.
-	It is recommended to run a container with limited privilge used instead
+	It is recommended to run a container with limited privilege used instead
 	of the ROOT user.
 	Three important permission Aspects
 	runAsUser - Specifies the user of the running process in containers
@@ -983,7 +987,7 @@ cluster however the nodes will not be in ready state.
 	
 	
      60 Upgrading Kubeadm Clusters
-	Following are the high-level steps required to perfrom kubeadm upgrade.
+	Following are the high-level steps required to perform kubeadm upgrade.
 	1. Find the latest version to upgrade to.
 	2. Unhold the kubeadm binary
 	   apt-mark unhold kubelet
@@ -1006,18 +1010,18 @@ kubectl=1.19.1.-00
 	   
      61 Kubernetes from Scratch
 	  Create a master and slave ubuntu server
-          Server - Contains binarie for master server components like API 
+          Server - Contains binaries for master server components like API 
 	  server , controller manager, scheduler and others.
 	  Node - Contains binaries required by worker nodes kubelet, i
 	  kube-proxy
 	  Client - Binaries required by client, Kubectl
 	  https://kubernetes.io/docs/setup/release/notes
-	  Note : etcd is a seperate repo as its not managed by Kubernetes
+	  Note : etcd is a separate repo as its not managed by Kubernetes
 	  
 	  There are multiple components which will be communicating with each
 other
 	  When communication is in plain-text, it is prone to lot of attacks.
-	  hence it is importnat to have secure communication between multiple
+	  hence it is important to have secure communication between multiple
 components. This can be achieved with the help of certificates.
 	  certificate Authority is an entity which issues digital certificates.
 	 key part is that both the receiver and the sender trusts the CA.
@@ -1033,7 +1037,7 @@ ca.crt -days 1000
 	   openssl x509 -in ca.crt -text -noout
 	   
            Configuring etcd
-           etcd is a distrubted reliable key-value store.
+           etcd is a distributed reliable key-value store.
 	   etcd reliably stored the configuration data of the kubernetes
 cluster, representing the state of the cluster at any given point of time.
 	   Pre-Requisite:
@@ -1108,14 +1112,15 @@ cluster, representing the state of the cluster at any given point of time.
 	   systemctl enable etcd
 	   
 	   Verification Commands:
-	   when we try with etcdctl --endpoints=https://127.0.0.1:2379 get foo,it gives unkown certificate authority
+	   when we try with etcdctl --endpoints=https://127.0.0.1:2379 get
+foo,it gives unknown certificate authority
 
 	   ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379
 --cacert=/etc/etcd/ca.crt --cert=/etc/etcd/etcd.crt --key=/etc/etcd/etcd.key put course "kplabs cka course is awesome"
 	   
 	   step5 : Configuring API server
 	   API server acts as a gateway to the Kubernetes Cluster
-	   When you intercat with you Kubernetes cluster using the kubectl command-line interface, you are actually communicating with the master API server component.
+	   When you interact with you Kubernetes cluster using the kubectl command-line interface, you are actually communicating with the master API server component.
 
 	   kubectl get serviceaccount
 	   kubectl get serviceaccount -o yaml
@@ -1131,7 +1136,7 @@ watches ServiceAccount token Secret addition, and ensures the referenced Service
 watches Secret deletion and removes a reference from the corresponding
 ServiceAccount if needed.
 	   
-	   Pre-requisite: Move the Kube-apiserver binary to the /usr/bim directory
+	   Pre-requisite: Move the Kube-apiserver binary to the /usr/bin directory
 	   cd /root/binaries/kubernetes/server/bin
 	   cp kube-apiserver /usr/local/bin
 	
@@ -1172,7 +1177,7 @@ ServiceAccount if needed.
 	  cp etcd.crt etcd.key ca.crt kupe-api.key kube-api.crt
 service-account.crt service-account.key /var/lib/kubernetes
 	  
-	 step5: Creating Encryption key and Configuratiom
+	 step5: Creating Encryption key and Configuration
 	 ENCRYPTION_KEY= $(head -c 32 /dev/urandom | base64)
 
 	 cat > encryption-at-rest.yaml << EOF
@@ -1497,9 +1502,10 @@ openssl-kplabs-cka-worker.cnf -days 1000
 	This can either be manual approach or via SCP. certificates:
 	kubelet, kube-proxy and CA certificate.
 
-	in-case you want to autoamte it, then following configuration can be
+	in-case you want to automate it, then following configuration can be
 used. In the demo, we had made used 
-	in-case you want to trasnfer file from master worket node, then you can make use of the folowing app
+	in-case you want to transfer file from master worker node, then you can
+make use of the following app
 
 	Worker Node:
 	nano /etc/ssh/sshd_config
@@ -1748,13 +1754,13 @@ like IP address, hostnames of the nodes
       62 Kubernetes Events
 	 Kubernetes Events are created when other resources have state changes,
 errors , or other messages that should be broadcast to the system
-	It proviedes insight into what is happening insite a cluster such as
-what decsiins were made by the scheduler or why some pods were evicted from the
+	It provides insight into what is happening inside a cluster such as
+what decisions were made by the scheduler or why some pods were evicted from the
 node.
 	kubectl get events
 	All the events are stored in the master server.
 	To avoid filling up master's disk, a retention policy is enforced:
-eventars are removed one hour after the last occurrence.
+eventags are removed one hour after the last occurrence.
 	To provide longer history and aggregation capabilities, a third part
 solution should be installed to capture events.
 	Events are namespaced.
@@ -1768,7 +1774,7 @@ metrics aggregate and expose them through the kubelet summary API
 	This is achieved with CAdvisor
 	kube-state-metrics is a simple service that listens to the kubernetes
 API server and generates metrics about the state of the objects.
-	It is not focused on the helath of the individul kubernetes components,
+	It is not focused on the health of the individual kubernetes components,
 but rather on the health of the various objects inside, such as deployment,
 nodes and pods.
 	git clone https://github.com/kubernetes-incubator/metrics-server.git
@@ -1862,10 +1868,10 @@ kube-scheduler.log,kube-controller-manager.log, kubelet.log kube-proxy.log
 	   kubectl describe service kplabs-service
 	   kubectl get pods --namespace teama
 	   (check the selector )
-	   kubectl decsribe pods nginx-pod-first --namespace teama
+	   kubectl describe pods nginx-pod-first --namespace teama
 	   (did not have the required label)
 	   kubectl apply -f application-failure.yaml
-	   (still the namespace of service and pods is diffrent)
+	   (still the namespace of service and pods is different)
 
 	   issue2: Conttrol Plane failure
 	   Verify if all the cluster level components are healthy
@@ -1889,7 +1895,7 @@ version. can be upto one monir version older (specifically during upgrades)
 	    kubectl drain $NODENAME --ignore-daemonsets --d;ete-local-data
 	    This will gracefully terminate all the pods on the node while
 marking the nodes as unschedulable. For pods with a replica set, the pod will be
-replaced by a new pod which will be schedukled to a new node. Static Pods will
+replaced by a new pod which will be scheduled to a new node. Static Pods will
 be terminated.
 	    Taint Based Evictions
 	    The worker nodes are automatically tainted in Kubernetes based on
